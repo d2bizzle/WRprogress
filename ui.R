@@ -8,7 +8,7 @@ library(plotly)
 library(quantreg)
 library(e1071)
 
-theme = shinytheme('yeti')
+theme = shinytheme('superhero')
 
 ui <- fluidPage(
   titlePanel("World Record Progress and Potentially Novel Ways to Detect Doping"),
@@ -28,7 +28,7 @@ ui <- fluidPage(
                    c("World Record" = "WR",
                      "All-Time" = "AT"
                    )),
-      checkboxInput("annul", "Include annulled performance? (For 100m only.)", T)
+      checkboxInput("annul", "Include annulled performance? (For 100m only.)", F)
     ),
     
     
