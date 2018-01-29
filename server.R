@@ -19,7 +19,7 @@ server <- function(input, output) {
 
   
   hundred_WR_plot_plus <-  ggplot(hundred_WRplus, aes(x = year, y = digitalTime, color = notes)) + geom_point() + labs(x = 'Year', y = 'Time (s)') + 
-    geom_errorbar(aes(x = year, ymin=digitalTime - error, ymax=digitalTime + error), colour="red", width=.1) + ggtitle("100m WR Over Time (Incl. Annulled Performances)") +
+    geom_errorbar(aes(x = year, ymin=digitalTime - error, ymax=digitalTime + error), colour="red", width=.1) + ggtitle("100m WR Over Time (Incl. Annulled)") +
     theme_tufte() + theme(title = red.bold.italic.text, axis.title = red.bold.italic.text, 
                                                                         axis.text.x = blue.bold.italic.text, axis.text.y = blue.bold.italic.text)
   
@@ -54,6 +54,18 @@ server <- function(input, output) {
     theme(title = red.bold.italic.text, axis.title = red.bold.italic.text, 
           axis.text.x = blue.bold.italic.text, axis.text.y = blue.bold.italic.text)
   
+  hundred_Boxplot = ggplot(hundred_AT, aes(x = year, y = digitalTime)) + geom_boxplot() + labs(x = 'Year', y = 'Time(s)')  + 
+    theme_tufte() + theme(title = red.bold.italic.text, axis.title = red.bold.italic.text, 
+          axis.text.x = blue.bold.italic.text, axis.text.y = blue.bold.italic.text)
+  
+  fift_Boxplot = ggplot(fift_AT, aes(year, digitalTime, label = time)) + geom_boxplot() + labs(x = 'Year', y = 'Time(m)') + theme_tufte() + 
+    theme(title = red.bold.italic.text, axis.title = red.bold.italic.text, 
+          axis.text.x = blue.bold.italic.text, axis.text.y = blue.bold.italic.text)
+  
+  Tenk_Boxplot = ggplot(Tenk_AT, aes(year, digitalTime, label = time)) + geom_boxplot() + labs(x = 'Year', y = 'Time(m)') + theme_tufte() + 
+    theme(title = red.bold.italic.text, axis.title = red.bold.italic.text, 
+          axis.text.x = blue.bold.italic.text, axis.text.y = blue.bold.italic.text)
+  
   observe({
     
     if (input$event == 'hundred') {
@@ -82,13 +94,27 @@ server <- function(input, output) {
                            "AT" = hundred_AT_plot_plus,
                            "WR" = hundred_WR_plot_plus)
     }
-    output$plot <- renderPlotly({
+    
+      Event_Boxplot <- switch(input$event,
+                           hundred = hundred_Boxplot,
+                           fift = fift_Boxplot,
+                           Tenk = Tenk_Boxplot
+                          )
+    
+    
+    output$plot1 <- renderPlotly({
       
       Event_plot
     })
     
+    output$plot2 <- renderPlotly({
+      
+      Event_Boxplot
+    
+    })
+    
     output$video <- renderUI({
-      tags$iframe(src = link, width = 650, height = 433)
+      tags$iframe(src = link, width = 650, height = 406)
     })
   })
   

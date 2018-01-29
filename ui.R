@@ -8,10 +8,9 @@ library(plotly)
 library(quantreg)
 library(e1071)
 
-theme = shinytheme('superhero')
-
 ui <- fluidPage(
   titlePanel("World Record Progress and Potentially Novel Ways to Detect Doping"),
+  theme = shinytheme('superhero'),
   
   
   
@@ -33,11 +32,19 @@ ui <- fluidPage(
     
     
     mainPanel(
-      plotlyOutput("plot"),
       
-      hr(),
+      tabsetPanel(
+        tabPanel("Scatter Plots", 
+                 plotlyOutput("plot1", height = 406,
+                              width = 650),
+                 
+                 hr(),
+                 
+                 htmlOutput("video")),
+        tabPanel("Box Plots", plotlyOutput("plot2")),
+        tabPanel("Table", tableOutput("table"))
+      )
       
-      htmlOutput("video")
                   ))
 )
 
