@@ -18,8 +18,8 @@ server <- function(input, output) {
   hundred_dope <- WR %>% filter(event == 100, notes == 'doping') %>% select(digitalTime, notes, year)
   hundred_analysis = full_join(hundred_random, hundred_dope)
   effective100 <- wilcox.test(hundred_analysis$digitalTime~hundred_analysis$notes)
-  dope100 <- hundred_dope %>% summarise(mean = mean(digitalTime, na.rm=T), sd = sd(digitalTime, na.rm=T))
-  random100 <- sample_n(hundred_random, 121) %>% summarise(mean = mean(digitalTime, na.rm=T), sd = sd(digitalTime, na.rm=T))
+  dope100 <- hundred_dope %>% summarise(mean = mean(digitalTime, na.rm=T), med= median(digitalTime), sd = sd(digitalTime, na.rm=T))
+  random100 <- sample_n(hundred_random, 121) %>% summarise(mean = mean(digitalTime, na.rm=T), med= median(digitalTime),sd = sd(digitalTime, na.rm=T))
   
   TenkTop = Tenk_AT %>% group_by(year) %>% arrange(digitalTime) %>% top_n(-30, wt = digitalTime)
   Top30Tenk = TenkTop %>% group_by(year) %>% summarise(meanTime = mean(digitalTime), sdTime = sd(digitalTime),
@@ -142,10 +142,10 @@ theme_economist() + scale_color_economist() + ggtitle("10000m All-Time Performan
       sprintf("The result of the Wilcoxon test gives a p-value of %0.3f", effective100[3])
     })
     output$hundredDope <- renderText({
-      sprintf("The mean of the doped samples is %2.3f and the standard deviation is %0.3f", dope100[1],dope100[2])
+      sprintf("The mean and median of the doped samples are %2.3f and %2.3f respectively, and the standard deviation is %0.3f", dope100[1],dope100[2], dope100[3])
     })
     output$hundredRandom <- renderText({
-      sprintf("The mean of the doped samples is %2.3f and the standard deviation is %0.3f", random100[1],random100[2])
+      sprintf("The mean of the randomly selected samples are %2.3f and %2.3f respectively, and the standard deviation is %0.3f", random100[1],random100[2], random100[3])
     })
     output$plot4 <- renderPlotly({
       
