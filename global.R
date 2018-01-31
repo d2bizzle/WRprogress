@@ -1,3 +1,4 @@
 library(data.table)
 
-WR <- fread(file = "./data/WRprogression.csv")
+WR <- fread(file = "./WRprogression.csv")
+timeData <- fread(file = "./data.csv")
