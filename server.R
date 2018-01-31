@@ -22,11 +22,8 @@ server <- function(input, output) {
   random100 <- sample_n(hundred_random, 121) %>% summarise(mean = mean(digitalTime, na.rm=T), med= median(digitalTime),sd = sd(digitalTime, na.rm=T))
   
   TenkTop = Tenk_AT %>% group_by(year) %>% arrange(digitalTime) %>% top_n(-30, wt = digitalTime)
-  Top30Tenk = TenkTop %>% group_by(year) %>% summarise(meanTime = mean(digitalTime), sdTime = sd(digitalTime),
+  Top30Tenk = TenkTop %>% group_by(year) %>% filter(year > 1971) %>% summarise(meanTime = mean(digitalTime), sdTime = sd(digitalTime),
                                                        skewTime = skewness(digitalTime), kurtTime = kurtosis(digitalTime))
-  
-  Top30TenkPlot = ggplot(Top30Tenk, aes(year,sdTime)) + geom_point() + geom_smooth(method = "lm") +
-    labs(x = 'Year', y = 'sd(Time (s))') + ggtitle("10000m Standard Deviation Over Time") + theme_economist() + scale_color_economist()
 
   
 hundred_WR_plot_plus <- ggplot(hundred_WRplus, aes(x = year, y = digitalTime, color = notes)) + geom_point() + labs(x = 'Year', y = 'Time (s)') + 
@@ -70,7 +67,7 @@ theme_economist() + scale_color_economist() + ggtitle("10000m All-Time Performan
   Tenk_density = ggplot(Tenk_AT, aes(x = digitalTime, label = time)) + geom_density(aes(fill="red"), alpha = 0.3) + 
     labs(x = "Time (m)", y = "Frequency", title = "World's All-Time 10000m Performance List")
   
-  Top30TenkPlot = ggplot(Top30Tenk, aes(year,sdTime)) + geom_point() + geom_smooth(method = "lm") +
+  Top30TenkPlot = ggplot(Top30Tenk, aes(year,sdTime)) + geom_point() + geom_smooth(method = "lm", se = F) +
     labs(x = 'Year', y = 'sd(Time (s))') + ggtitle("10000m Standard Deviation Over Time") + theme_economist() + scale_color_economist()
   
   observe({
@@ -145,7 +142,7 @@ theme_economist() + scale_color_economist() + ggtitle("10000m All-Time Performan
       sprintf("The mean and median of the doped samples are %2.3f and %2.3f respectively, and the standard deviation is %0.3f", dope100[1],dope100[2], dope100[3])
     })
     output$hundredRandom <- renderText({
-      sprintf("The mean of the randomly selected samples are %2.3f and %2.3f respectively, and the standard deviation is %0.3f", random100[1],random100[2], random100[3])
+      sprintf("The mean and median of the randomly selected samples are %2.3f and %2.3f respectively, and the standard deviation is %0.3f", random100[1],random100[2], random100[3])
     })
     output$plot4 <- renderPlotly({
       
