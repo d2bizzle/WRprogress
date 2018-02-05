@@ -3,11 +3,11 @@ library(shinythemes)
 library(dplyr)
 library(ggplot2)
 library(ggthemes)
-library(lubridate)
 library(plotly)
 library(quantreg)
 library(e1071)
 library(timevis)
+library(car)
 
 ui <- fluidPage(
   titlePanel("World Record Progress and Potentially Novel Ways to Detect Doping"),
@@ -50,10 +50,17 @@ ui <- fluidPage(
                                                width = 650)),
         tabPanel("Timeline", timevisOutput("timeline", height = 750,
                                            width = 650)),
-        tabPanel("100 Analysis", textOutput("hundredTest"),
-          textOutput("hundredDope"), textOutput("hundredRandom")),
-        tabPanel("10000 Analysis", plotlyOutput("plot4", height = 750,
-                                                width = 650))
+        tabPanel("10000 Analysis", plotlyOutput("plot5", height = 406,
+                                                width = 650),
+                 
+                 hr(),
+                 plotlyOutput("plot6", height = 406,
+                             width = 650)),
+        tabPanel("1500 Analysis", plotlyOutput("plot7", height = 750,
+                                               width = 650)),
+        tabPanel("Discussion",
+                 tags$iframe(style="height:700px; width:100%; scrolling=yes", 
+                             src="https://www.dropbox.com/s/3rx5ta78c4qd2kx/WRprogress.pdf"))
       )
       
                   ))
